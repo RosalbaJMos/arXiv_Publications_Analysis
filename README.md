@@ -8,9 +8,9 @@
 
  Part 2: 
  
-    2.0 The App shows the keywords that appear the most when dividing the relevant field (Physics, Biology, Math, or CS) into six main topics. The main words related to each topic are shown in each plot and also displayed as wordclouds.
-
-Part 3:
+    2.0 The App shows the keywords that appear the most when dividing the relevant field (Physics, Biology, Math, or CS) into six main topics. The main words related to each topic are shown in each plot and also displayed as wordclouds
+    
+    Part 3:
     3.0 In this part, the user can introduce an abstract for classification as a abstract that falls into one of the following categories: - Physics - Biology - Computer Science (CS).
 
 
@@ -28,13 +28,13 @@ Part 3:
 
 6. Sample_PhBiCS.csv -->  This file contains the information (Abstract, Field ) of the last 600 scientific articles published on arXiv in 2021 related to the fields of Physics, Biology, and Computer Science. This data is used to train the ML model.
 
-7. ML_streamlit_app_arxiv_16FEB.py  --> The python script to run on streamlit.
+7. streamlit_app_arxiv_18FEB.py  --> The python script to run on streamlit.
 
 8. README.md
 
 ## How to Install and Run the Project
-To run the app, it is necessary to have all the above-liested files inside the same directory where the ML_streamlit_app_arxiv_16FEB.py script is located. To run it,  use the following command from your terminal:
+To run the app, it is necessary to have all the above-liested files inside the same directory where the streamlit_app_arxiv_18FEB.py script is located. To run it,  use the following command from your terminal:
 
-streamlit run ML_streamlit_app_arxiv_16FEB.py
+streamlit run streamlit_app_arxiv_18FEB.py
 
 
