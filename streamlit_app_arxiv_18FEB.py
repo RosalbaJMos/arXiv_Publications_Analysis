@@ -51,7 +51,7 @@ nlp = en_core_web_sm.load()
 
 
 stop_words = stopwords.words('english')
-stop_words.extend(['from', 'subject', 're', 'due', 'edu', 'observe', 'find', 'set', 'cal', 'solve', 'example', 'text', 
+stop_words.extend(['from', 'subject', 're', 'due', 'edu', 'observe', 'observed', 'find', 'set', 'cal', 'solve', 'example', 'text', 
                     'provide', 'increase', 'decrease', 'context', 'achieve', 'large', 'number', 'step', 'give', 
                     'equation', 'solution', 'obtain', 'non', 'paper', 'consider', 'propose', 'important', 'approach',
                      'high', 'low', 'first', 'discuss', 'system', 'term', 'problem', 'model', 'various', 'general', 'require', 'property', 
@@ -71,6 +71,13 @@ fields = ['Physics','Biology','Computer Science']
 
 
 st.sidebar.image('arXiv.png')
+
+st.sidebar.header('2.1 Select the field ')
+data_key = st.sidebar.selectbox('field:', data_dict.keys())
+
+with st.sidebar.header('2.2 Set Parameters '):
+    n_components = st.sidebar.slider('No. Topics', 6, 9, 12)
+
 st.title("The hottest scientific topics on arXiv in 2021 ")
 st.subheader('*This is an App that analyzes the abstracts of articles published on arXiv in 2021 and classifies your own abstract*')
 
@@ -126,7 +133,7 @@ def plot_topics(topics, data_abstract_ready):
 
     df = pd.DataFrame(out, columns=['word', 'topic_id', 'importance', 'word_count'])  
 
-    fig, axes = plt.subplots(3, 2, figsize=(16,16), sharey=True, dpi=160)
+    fig, axes = plt.subplots(3, 3, figsize=(16,16), sharey=True, dpi=160)
     cols = [color for name, color in mcolors.TABLEAU_COLORS.items()]
     for i, ax in enumerate(axes.flatten()):
         ax.bar(x='word', height="word_count", data=df.loc[df.topic_id==i, :], color=cols[i], width=0.5, alpha=0.3, label='Word Count')
@@ -142,7 +149,7 @@ def plot_topics(topics, data_abstract_ready):
     fig.tight_layout(w_pad=2)    
     fig.suptitle('Word Count and Importance of Topic Keywords', fontsize=22, y=1.05)    
     st.pyplot(fig)
-    st.markdown(imagedownload(plt,'plot_top_words_per_topic.pdf'), unsafe_allow_html=True)
+    st.markdown(':inbox_tray:' + imagedownload(plt,'plot_top_words_per_topic.pdf'), unsafe_allow_html=True)
 
 
 # 5. Wordcloud of Top N words in each topic
@@ -157,7 +164,7 @@ def wordclouds(topics):
                   colormap='tab10',
                   color_func=lambda *args, **kwargs: cols[i],
                   prefer_horizontal=1.0)
-    fig, axes = plt.subplots(2, 3, figsize=(16,16), sharex=True, sharey=True)
+    fig, axes = plt.subplots(3, 3, figsize=(16,16), sharex=True, sharey=True)
 
     for i, ax in enumerate(axes.flatten()):
         fig.add_subplot(ax)
@@ -173,7 +180,7 @@ def wordclouds(topics):
     plt.margins(x=0, y=0)
     plt.tight_layout()
     st.pyplot(plt)
-    st.markdown(imagedownload(plt,'plot_top_words_per_topic.pdf'), unsafe_allow_html=True)
+    st.markdown(':inbox_tray:' + imagedownload(plt,'Wordclouds_per_topic.pdf'), unsafe_allow_html=True)
 
 # 6. Another function to clean and tokenize my text 
 def text_data_cleaning(sentence):
@@ -216,7 +223,7 @@ def articles(Publications2021):
 
     plt.legend()
     st.pyplot(plt)
-    st.markdown(imagedownload(plt,'plot_publications_in_2021.pdf'), unsafe_allow_html=True)
+    st.markdown(':inbox_tray:' + imagedownload(plt,'plot_publications_in_2021.pdf'), unsafe_allow_html=True)
 
 ##################################
 # MY MAIN (main) FUNCTION
@@ -228,8 +235,8 @@ def main():
     Publications2021 = pd.read_csv('Pubs_PhyMatCSBIO2021.csv') 
     articles(Publications2021)
 
-    data_key = st.sidebar.selectbox('2.1. Select the field', data_dict.keys())
-    
+    #data_key = st.sidebar.selectbox('2.1. Select the field', data_dict.keys())
+
     try:
         df = pd.read_csv(data_dict[data_key], parse_dates=['abstract'])
         st.markdown('** :small_orange_diamond: 2.0. This is the dataframe of ' + data_key + '. If you wish to analyze the topics of another field, please select the field on the sidebar at the left :point_left:**')
@@ -247,7 +254,7 @@ def main():
         #Build our Topic (LDA model)
         lda_model = gensim.models.ldamodel.LdaModel(corpus=corpus,
                                            id2word=id2word,
-                                           num_topics=6, 
+                                           num_topics=n_components, 
                                            random_state=100,
                                            update_every=1,
                                            chunksize=10,
@@ -258,7 +265,7 @@ def main():
         
         ## call my plot_topics function
         topics = lda_model.show_topics(formatted=False)
-        st.markdown('**2.2. These are the keywords that appear more often in the field of ' + data_key + ' when dividing it into six main topics**')
+        st.markdown('**2.3. These are the keywords that appear more often in the field of ' + data_key + ' when dividing it into ' + str(n_components) + ' main topics**')
         plot_topics(topics, data_abstract_ready)
 
         ## call my wordclouds function
@@ -271,6 +278,7 @@ def main():
 
 main()
     ##################################  HERE STARTS THE PART OF ML ######################################################
+#st.cache(suppress_st_warning=True)
 def my_predicting_machine(Abstract):
     st.write('Your abstract', Abstract)
 
@@ -307,6 +315,5 @@ st.markdown('**:small_orange_diamond: 3.0. In this part of the App, you can ente
 Abstract = st.text_input('Enter your abstract', ' ')
 
 if st.button('Press to classify your abstract'):
-    #st.cache(suppress_st_warning=True)
     my_predicting_machine(Abstract)
 
