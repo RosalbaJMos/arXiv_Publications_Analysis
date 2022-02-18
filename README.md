@@ -9,8 +9,8 @@
  Part 2: 
  
     2.0 The App shows the keywords that appear the most when dividing the relevant field (Physics, Biology, Math, or CS) into six main topics. The main words related to each topic are shown in each plot and also displayed as wordclouds
-    
-    Part 3:
+
+ Part 3:
     3.0 In this part, the user can introduce an abstract for classification as a abstract that falls into one of the following categories: - Physics - Biology - Computer Science (CS).
 
 
