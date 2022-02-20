@@ -38,4 +38,7 @@ To run the app, it is necessary to have all the above-liested files inside the s
 
 streamlit run streamlit_app_arxiv_18FEB.py
 
+## App available on share streamlit
+https://share.streamlit.io/rosalbajmos/arxiv_publications_analysis/main/streamlit_app_arxiv_18FEB.py 
+
 
